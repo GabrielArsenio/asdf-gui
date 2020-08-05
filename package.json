@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "vue": "2.6.11"
+    "vue": "2.6.11",
+    "vuetify": "^2.3.7"
   }
 }

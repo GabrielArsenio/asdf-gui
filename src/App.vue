@@ -1,5 +1,11 @@
 <template>
-  <div id="app">{{ text }}</div>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container>Hello world</v-container>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script>
