@@ -26,7 +26,7 @@ export default {
   name: "App",
   data () {
     return {
-      path: null,
+      path: process.env.HOME,
     }
   },
 }
