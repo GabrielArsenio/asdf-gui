@@ -16,15 +16,39 @@
     <v-main>
       <v-container>
         <v-row>
-          <v-col cols="12">
+          <v-col cols="6">
             <v-card>
               <v-card-title>Plugins</v-card-title>
               
               <v-list two-line>
-                <v-list-item v-for="plugin in pluginList" :key="plugin">
+                <v-list-item v-for="plugin in pluginList" :key="plugin.name" @click="loadInstalledVersionList(plugin.name); loadAvailableVersionList(plugin.name)">
                   <v-list-item-content>
-                    <v-list-item-title v-text="plugin"></v-list-item-title>
-                    <!-- <v-list-item-subtitle>Versao</v-list-item-subtitle> -->
+                    <v-list-item-title v-text="plugin.name"></v-list-item-title>
+                    <v-list-item-subtitle v-text="plugin.version"></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card>
+              <v-card-title>Versões</v-card-title>
+
+              <v-list two-line>
+                <v-subheader>Instaladas</v-subheader>
+                <v-list-item v-for="version in installedVersionList" :key="version" @click="">
+                  <v-list-item-content>
+                    <v-list-item-title v-text="version"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-divider></v-divider>
+
+                <v-subheader>Disponíveis</v-subheader>
+                <v-list-item v-for="version in availableVersionList" :key="version" @click="">
+                  <v-list-item-content>
+                    <v-list-item-title v-text="version"></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -38,14 +62,16 @@
 </template>
 
 <script>
-import { pluginList } from './services/asdf.service'
+import { pluginList, list, listAll } from './services/asdf.service'
 
 export default {
   name: "App",
   data () {
     return {
       path: process.env.HOME,
-      pluginList: []
+      pluginList: [],
+      installedVersionList: [],
+      availableVersionList: []
     }
   },
   methods: {
@@ -54,6 +80,12 @@ export default {
     },
     async loadPluginList () {
       this.pluginList = await pluginList(this.path)
+    },
+    async loadInstalledVersionList (pluginName) {
+      this.installedVersionList = await list(pluginName)
+    },
+    async loadAvailableVersionList (pluginName) {
+      this.availableVersionList = await listAll(pluginName)
     }
   },
   mounted() {
