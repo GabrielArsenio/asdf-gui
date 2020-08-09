@@ -39,5 +39,3 @@ new Vue({
   vuetify,
   render: h => h(App),
 }).$mount('#app')
-
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
