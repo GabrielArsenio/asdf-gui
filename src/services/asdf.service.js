@@ -31,7 +31,7 @@ export const list = pluginName => {
     exec(`asdf list ${pluginName}`, (error, stdout, stderr) => {
       const installedVersions = stdout.split('\n')
       installedVersions.pop()
-      resolve(installedVersions)
+      resolve(installedVersions.reverse())
     })
   })
 }
@@ -41,7 +41,7 @@ export const listAll = pluginName => {
     exec(`asdf list-all ${pluginName}`, (error, stdout, stderr) => {
       const installedVersions = stdout.split('\n')
       installedVersions.pop()
-      resolve(installedVersions)
+      resolve(installedVersions.reverse())
     })
   })
 }
