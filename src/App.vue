@@ -11,6 +11,7 @@
         rounded
         dense
         hide-details
+        disabled
       ></v-text-field>
     </v-app-bar>
     <v-main>
@@ -41,6 +42,16 @@
                   <v-list-item-content>
                     <v-list-item-title v-text="version"></v-list-item-title>
                   </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon>mdi-earth</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
                 </v-list-item>
 
                 <v-divider></v-divider>
@@ -50,6 +61,11 @@
                   <v-list-item-content>
                     <v-list-item-title v-text="version"></v-list-item-title>
                   </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon>mdi-download</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
                 </v-list-item>
               </v-list>
 
