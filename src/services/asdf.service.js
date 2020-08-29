@@ -14,7 +14,7 @@ export const pluginList = execPath => {
                     exec(`cd ${execPath} && asdf current ${plugin}`, (error, stdout, stderr) => {
                         pluginList.push({
                             name: plugin,
-                            version: stdout
+                            version: stdout.split(' ')[0]
                         })
                         resolve()
                     })
@@ -42,6 +42,15 @@ export const listAll = pluginName => {
       const installedVersions = stdout.split('\n')
       installedVersions.pop()
       resolve(installedVersions.reverse())
+    })
+  })
+}
+
+export const set = (scope, pluginName, version) => {
+  return new Promise((resolve, reject) => {
+    exec(`asdf ${scope} ${pluginName} ${version}`, (error, stdout, stderr) => {
+      if (stderr) reject(stderr)
+      else resolve()
     })
   })
 }
