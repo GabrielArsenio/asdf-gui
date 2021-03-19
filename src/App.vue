@@ -20,18 +20,25 @@
           <v-col cols="6">
             <v-card>
               <v-card-title>Plugins</v-card-title>
-              
-              <v-list two-line>
-                <v-list-item
-                  v-for="plugin in pluginList"
-                  :key="plugin.name"
-                  @click="loadInstalledVersionList(plugin.name);loadAvailableVersionList(plugin.name);selectedPlugin=plugin">
-                  <v-list-item-content>
-                    <v-list-item-title v-text="plugin.name"></v-list-item-title>
-                    <v-list-item-subtitle v-text="plugin.version"></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
+
+                <v-row justify="center" v-if="trackers.pluginList">
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                  ></v-progress-circular>
+                </v-row>
+
+                <v-list two-line>
+                  <v-list-item
+                    v-for="plugin in pluginList"
+                    :key="plugin.name"
+                    @click="loadInstalledVersionList(plugin.name);loadAvailableVersionList(plugin.name);selectedPlugin=plugin">
+                    <v-list-item-content>
+                      <v-list-item-title v-text="plugin.name"></v-list-item-title>
+                      <v-list-item-subtitle v-text="plugin.version"></v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
 
             </v-card>
           </v-col>
@@ -41,6 +48,16 @@
 
               <v-list two-line>
                 <v-subheader>Instaladas</v-subheader>
+
+                <v-row justify="center" v-if="trackers.installedVersionList">
+                  <v-col cols="1">
+                    <v-progress-circular
+                      indeterminate
+                      color="primary"
+                    ></v-progress-circular>
+                  </v-col>
+                </v-row>
+
                 <v-list-item v-for="version in installedVersionList" :key="version">
                   <v-list-item-content>
                     <v-list-item-title v-text="version"></v-list-item-title>
@@ -60,6 +77,16 @@
                 <v-divider></v-divider>
 
                 <v-subheader>Disponíveis</v-subheader>
+
+                <v-row justify="center" v-if="trackers.availableVersionList">
+                  <v-col cols="1">
+                    <v-progress-circular
+                      indeterminate
+                      color="primary"
+                    ></v-progress-circular>
+                  </v-col>
+                </v-row>
+                
                 <v-list-item v-for="version in availableVersionList" :key="version" @click="">
                   <v-list-item-content>
                     <v-list-item-title v-text="version"></v-list-item-title>
@@ -91,7 +118,12 @@ export default {
       selectedPlugin: null,
       pluginList: [],
       installedVersionList: [],
-      availableVersionList: []
+      availableVersionList: [],
+      trackers: {
+        pluginList: false,
+        installedVersionList: false,
+        availableVersionList: false
+      }
     }
   },
   methods: {
@@ -101,16 +133,31 @@ export default {
       this.loadPluginList()
     },
     async loadPluginList () {
-      this.pluginList = []
-      this.pluginList = await pluginList(this.path)
+      try {
+        this.pluginList = []
+        this.trackers.pluginList = true
+        this.pluginList = await pluginList(this.path)
+      } finally {
+        this.trackers.pluginList = false
+      }
     },
     async loadInstalledVersionList (pluginName) {
-      this.installedVersionList = []
-      this.installedVersionList = await list(pluginName)
+      try {
+        this.installedVersionList = []
+        this.trackers.installedVersionList = true
+        this.installedVersionList = await list(pluginName)
+      } finally {
+        this.trackers.installedVersionList = false
+      }
     },
     async loadAvailableVersionList (pluginName) {
-      this.availableVersionList = []
-      this.availableVersionList = await listAll(pluginName)
+      try {
+        this.availableVersionList = []
+        this.trackers.availableVersionList = true
+        this.availableVersionList = await listAll(pluginName)
+      } finally {
+        this.trackers.availableVersionList = false
+      }
     },
     async set(scope, pluginName, version) {
       await set(scope, pluginName, version)
