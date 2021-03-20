@@ -50,11 +50,12 @@
                 <v-subheader>Instaladas</v-subheader>
 
                 <v-row justify="center" v-if="trackers.installedVersionList">
-                  <v-col cols="1">
-                    <v-progress-circular
+                  <v-col cols="3">
+                    <v-progress-linear
                       indeterminate
-                      color="primary"
-                    ></v-progress-circular>
+                      rounded
+                      height="5"
+                    ></v-progress-linear>
                   </v-col>
                 </v-row>
 
@@ -79,15 +80,16 @@
                 <v-subheader>Disponíveis</v-subheader>
 
                 <v-row justify="center" v-if="trackers.availableVersionList">
-                  <v-col cols="1">
-                    <v-progress-circular
+                  <v-col cols="3">
+                    <v-progress-linear
                       indeterminate
-                      color="primary"
-                    ></v-progress-circular>
+                      rounded
+                      height="5"
+                    ></v-progress-linear>
                   </v-col>
                 </v-row>
                 
-                <v-list-item v-for="version in availableVersionList" :key="version" @click="">
+                <v-list-item v-for="version in availableVersionList" :key="version">
                   <v-list-item-content>
                     <v-list-item-title v-text="version"></v-list-item-title>
                   </v-list-item-content>
