@@ -14,7 +14,7 @@ export const pluginList = execPath => {
                     exec(`cd ${execPath} && asdf current ${plugin}`, (error, stdout, stderr) => {
                         pluginList.push({
                             name: plugin,
-                            version: stdout.split(' ')[0]
+                            version: stdout.replace(/  +/g, ' ').split(' ')[1]
                         })
                         resolve()
                     })
