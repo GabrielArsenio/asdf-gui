@@ -1,56 +1,38 @@
-const { exec } = require('child_process')
+const { exec } = require('./exec.service')
 
-export const pluginList = execPath => {
-    return new Promise(resolve => {
-        exec(`cd ${execPath} && asdf plugin-list`, (error, stdout, stderr) => {
-            const pluginNames = stdout.split('\n')
-            pluginNames.pop()
+export const pluginList = async execPath => {
+    const pluginNames = (await exec(`cd ${execPath} && asdf plugin-list`)).split('\n')
+    pluginNames.pop()
 
-            const versionPromisses = []
-            const pluginList = []
+    const versionPromisses = []
+    const pluginList = []
 
-            pluginNames.forEach(plugin => {
-                versionPromisses.push(new Promise(resolve => {
-                    exec(`cd ${execPath} && asdf current ${plugin}`, (error, stdout, stderr) => {
-                        pluginList.push({
-                            name: plugin,
-                            version: stdout.replace(/  +/g, ' ').split(' ')[1]
-                        })
-                        resolve()
-                    })
-                }))
-            })
-
-            Promise.all(versionPromisses).then(() => resolve(pluginList))
-        })
+    pluginNames.forEach(plugin => {
+        versionPromisses.push(
+            exec(`cd ${execPath} && asdf current ${plugin}`)
+            .then(stdout => {
+                pluginList.push({
+                    name: plugin,
+                    version: stdout.split(' ')[1]
+                })
+            }))
     })
+
+    return Promise.all(versionPromisses).then(() => pluginList)
 }
 
-export const list = pluginName => {
-  return new Promise(resolve => {
-    exec(`asdf list ${pluginName}`, (error, stdout, stderr) => {
-      const installedVersions = stdout.replace(/  +/g, '').split('\n')
-      installedVersions.pop()
-      resolve(installedVersions.reverse())
-    })
-  })
+export const list = async pluginName => {
+    const installedVersions = (await exec(`asdf list ${pluginName}`)).replace(/ +/g, '').split('\n')
+    installedVersions.pop()
+    installedVersions.reverse()
+    return installedVersions
 }
 
-export const listAll = pluginName => {
-  return new Promise(resolve => {
-    exec(`asdf list-all ${pluginName}`, (error, stdout, stderr) => {
-      const installedVersions = stdout.split('\n')
-      installedVersions.pop()
-      resolve(installedVersions.reverse())
-    })
-  })
+export const listAll = async pluginName => {
+    const installedVersions = (await exec(`asdf list-all ${pluginName}`)).split('\n')
+    installedVersions.pop()
+    installedVersions.reverse()
+    return installedVersions
 }
 
-export const set = (scope, pluginName, version) => {
-  return new Promise((resolve, reject) => {
-    exec(`asdf ${scope} ${pluginName} ${version}`, (error, stdout, stderr) => {
-      if (stderr) reject(stderr)
-      else resolve()
-    })
-  })
-}
+export const set = (scope, pluginName, version) => exec(`asdf ${scope} ${pluginName} ${version}`)
