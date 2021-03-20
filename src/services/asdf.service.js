@@ -29,7 +29,7 @@ export const pluginList = execPath => {
 export const list = pluginName => {
   return new Promise(resolve => {
     exec(`asdf list ${pluginName}`, (error, stdout, stderr) => {
-      const installedVersions = stdout.split('\n')
+      const installedVersions = stdout.replace(/  +/g, '').split('\n')
       installedVersions.pop()
       resolve(installedVersions.reverse())
     })
