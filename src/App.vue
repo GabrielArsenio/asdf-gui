@@ -100,8 +100,15 @@
                   <v-list-item-content>
                     <v-list-item-title v-text="version"></v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action>
-                    <v-btn icon>
+                  <v-progress-circular
+                    v-if="trackers.installVersion[version]"
+                    size="24"
+                    width="3"
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                  <v-list-item-action v-if="!trackers.installVersion[version]">
+                    <v-btn icon @click="install(selectedPlugin.name, version)">
                       <v-icon>mdi-download</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -117,7 +124,7 @@
 </template>
 
 <script>
-import { pluginList, list, listAll, set } from './services/asdf.service'
+import { pluginList, list, listAll, set, install } from './services/asdf.service'
 
 export default {
   name: "App",
@@ -132,7 +139,8 @@ export default {
         pluginList: false,
         installedVersionList: false,
         availableVersionList: false,
-        setVersion: {}
+        setVersion: {},
+        installVersion: {}
       }
     }
   },
@@ -177,6 +185,16 @@ export default {
         plugin.version = version
       } finally {
         this.$set(this.trackers.setVersion, version, false)
+      }
+    },
+    async install(pluginName, version) {
+      try {
+        this.$set(this.trackers.installVersion, version, true)
+        await install(pluginName, version)
+        this.availableVersionList = this.availableVersionList.filter(v => v !== version)
+        this.installedVersionList.push(version)
+      } finally {
+        this.$set(this.trackers.installVersion, version, false)
       }
     }
   },

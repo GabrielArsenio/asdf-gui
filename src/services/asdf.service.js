@@ -36,3 +36,5 @@ export const listAll = async pluginName => {
 }
 
 export const set = (scope, pluginName, version) => exec(`asdf ${scope} ${pluginName} ${version}`)
+
+export const install = (pluginName, version) => exec(`asdf install ${pluginName} ${version}`)
