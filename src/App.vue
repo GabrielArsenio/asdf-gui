@@ -64,13 +64,13 @@
                     <v-list-item-title v-text="version"></v-list-item-title>
                   </v-list-item-content>
                   <v-progress-circular
-                    v-if="trackers.setVersion"
+                    v-if="trackers.setVersion[version]"
                     size="24"
                     width="3"
                     color="primary"
                     indeterminate
                   ></v-progress-circular>
-                  <v-list-item-action v-if="!trackers.setVersion">
+                  <v-list-item-action v-if="!trackers.setVersion[version]">
                     <v-btn icon @click="set('global', selectedPlugin.name, version)">
                       <v-icon>mdi-earth</v-icon>
                     </v-btn>
@@ -132,7 +132,7 @@ export default {
         pluginList: false,
         installedVersionList: false,
         availableVersionList: false,
-        setVersion: false
+        setVersion: {}
       }
     }
   },
@@ -171,12 +171,12 @@ export default {
     },
     async set(scope, pluginName, version) {
       try {
-        this.trackers.setVersion = true
+        this.$set(this.trackers.setVersion, version, true)
         await set(scope, pluginName, version)
         const plugin = this.pluginList.find(plugin => plugin.name === pluginName)
         plugin.version = version
       } finally {
-        this.trackers.setVersion = false
+        this.$set(this.trackers.setVersion, version, false)
       }
     }
   },
