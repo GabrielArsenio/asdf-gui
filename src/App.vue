@@ -75,8 +75,15 @@
                       <v-icon>mdi-earth</v-icon>
                     </v-btn>
                   </v-list-item-action>
-                  <v-list-item-action>
-                    <v-btn icon>
+                  <v-progress-circular
+                    v-if="trackers.uninstallVersion[version]"
+                    size="24"
+                    width="3"
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                  <v-list-item-action v-if="!trackers.uninstallVersion[version]">
+                    <v-btn icon @click="uninstall(selectedPlugin.name, version)">
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -124,7 +131,7 @@
 </template>
 
 <script>
-import { pluginList, list, listAll, set, install } from './services/asdf.service'
+import { pluginList, list, listAll, set, install, uninstall } from './services/asdf.service'
 
 export default {
   name: "App",
@@ -140,7 +147,8 @@ export default {
         installedVersionList: false,
         availableVersionList: false,
         setVersion: {},
-        installVersion: {}
+        installVersion: {},
+        uninstallVersion: {}
       }
     }
   },
@@ -195,6 +203,16 @@ export default {
         this.installedVersionList.push(version)
       } finally {
         this.$set(this.trackers.installVersion, version, false)
+      }
+    },
+    async uninstall(pluginName, version) {
+      try {
+        this.$set(this.trackers.uninstallVersion, version, true)
+        await uninstall(pluginName, version)
+        this.installedVersionList = this.installedVersionList.filter(v => v !== version)
+        this.availableVersionList.unshift(version)
+      } finally {
+        this.$set(this.trackers.uninstallVersion, version, false)
       }
     }
   },
