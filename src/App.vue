@@ -29,15 +29,17 @@
                 </v-row>
 
                 <v-list two-line>
-                  <v-list-item
-                    v-for="plugin in pluginList"
-                    :key="plugin.name"
-                    @click="loadInstalledVersionList(plugin.name);loadAvailableVersionList(plugin.name);selectedPlugin=plugin">
-                    <v-list-item-content>
-                      <v-list-item-title v-text="plugin.name"></v-list-item-title>
-                      <v-list-item-subtitle v-text="plugin.version"></v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
+                  <v-list-item-group v-model="selectedPlugin">
+                    <v-list-item
+                      v-for="plugin in pluginList"
+                      :key="plugin.name"
+                      @click="loadInstalledVersionList(plugin.name);loadAvailableVersionList(plugin.name)">
+                      <v-list-item-content>
+                        <v-list-item-title v-text="plugin.name"></v-list-item-title>
+                        <v-list-item-subtitle v-text="plugin.version"></v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
                 </v-list>
 
             </v-card>
