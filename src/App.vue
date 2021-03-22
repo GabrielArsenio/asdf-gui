@@ -19,7 +19,14 @@
         <v-row>
           <v-col cols="6">
             <v-card>
-              <v-card-title>Plugins</v-card-title>
+
+                <v-toolbar>
+                  <v-toolbar-title>Plugins</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn icon>
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </v-toolbar>
 
                 <v-row justify="center" v-if="trackers.pluginList">
                   <v-progress-circular
@@ -46,7 +53,9 @@
           </v-col>
           <v-col cols="6">
             <v-card>
-              <v-card-title>Versões</v-card-title>
+              <v-toolbar>
+                <v-toolbar-title>Versões</v-toolbar-title>
+              </v-toolbar>
 
               <v-list two-line>
                 <v-subheader>Instaladas</v-subheader>
