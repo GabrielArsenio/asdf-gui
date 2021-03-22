@@ -23,9 +23,7 @@
                 <v-toolbar>
                   <v-toolbar-title>Plugins</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
+                  <new-plugin></new-plugin>
                 </v-toolbar>
 
                 <v-row justify="center" v-if="trackers.pluginList">
@@ -143,9 +141,13 @@
 
 <script>
 import { pluginList, list, listAll, set, install, uninstall } from './services/asdf.service'
+import NewPlugin from './components/NewPlugin.vue'
 
 export default {
   name: "App",
+  components: {
+    NewPlugin
+  },
   data () {
     return {
       path: process.env.HOME,
