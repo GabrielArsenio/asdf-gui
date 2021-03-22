@@ -1,5 +1,7 @@
 const { exec } = require('./exec.service')
 
+export const current = (execPath, pluginName) => exec(`cd ${execPath} && asdf current ${pluginName}`)
+
 export const pluginList = async execPath => {
     const pluginNames = (await exec(`cd ${execPath} && asdf plugin-list`)).split('\n')
     pluginNames.pop()
@@ -9,13 +11,12 @@ export const pluginList = async execPath => {
 
     pluginNames.forEach(plugin => {
         versionPromisses.push(
-            exec(`cd ${execPath} && asdf current ${plugin}`)
-            .then(stdout => {
+            (async () => {
                 pluginList.push({
                     name: plugin,
-                    version: stdout.split(' ')[1]
+                    version: (await current(execPath, plugin)).split(' ')[1] || '---'
                 })
-            }))
+            })())
     })
 
     return Promise.all(versionPromisses).then(() => pluginList)
