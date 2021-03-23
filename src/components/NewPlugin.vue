@@ -22,8 +22,11 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                label="Nome do plugin*"
+                label="Nome*"
                 required
+                :rules="rules"
+                v-model="pluginName"
+                @keyup.enter="add(pluginName)"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -36,9 +39,17 @@
           <v-btn
             color="primary"
             text
-            @click="dialog = false"
+            @click="close()"
           >
-            I accept
+            Cancelar
+          </v-btn>
+          <v-btn
+            color="primary"
+            :loading="loading"
+            :disabled="loading"
+            @click="add(pluginName)"
+          >
+            Salvar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -47,11 +58,39 @@
 </template>
 
 <script>
+  import { add } from '../services/asdf.service'
+
   export default {
     data () {
       return {
         dialog: false,
+        loading: false,
+        rules: [() => this.isValidPlugin || 'Plugin não encontrado'],
+        isValidPlugin: true,
+        pluginName: null
       }
     },
+    methods: {
+      async add (pluginName) {
+        try {
+          this.isValidPlugin = true
+          this.loading = true
+
+          await add(pluginName)
+
+          this.$emit('addedPlugin', pluginName)
+          this.pluginName = null
+        } catch (error) {
+          this.isValidPlugin = false
+        } finally {
+          this.loading = false
+        }
+      },
+      close () {
+        this.dialog = false
+        this.pluginName = null
+        this.isValidPlugin = true
+      }
+    }
   }
 </script>

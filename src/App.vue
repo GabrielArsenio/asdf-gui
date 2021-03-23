@@ -23,7 +23,7 @@
                 <v-toolbar>
                   <v-toolbar-title>Plugins</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <new-plugin></new-plugin>
+                  <new-plugin @addedPlugin="addPlugin"></new-plugin>
                 </v-toolbar>
 
                 <v-row justify="center" v-if="trackers.pluginList">
@@ -227,6 +227,12 @@ export default {
       } finally {
         this.$set(this.trackers.uninstallVersion, version, false)
       }
+    },
+    addPlugin (pluginName) {
+      this.pluginList.unshift({
+        name: pluginName,
+        version: '---'
+      })
     }
   },
   mounted() {

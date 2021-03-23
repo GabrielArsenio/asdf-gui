@@ -41,3 +41,5 @@ export const set = (scope, pluginName, version) => exec(`asdf ${scope} ${pluginN
 export const install = (pluginName, version) => exec(`asdf install ${pluginName} ${version}`)
 
 export const uninstall = (pluginName, version) => exec(`asdf uninstall ${pluginName} ${version}`)
+
+export const add = pluginName => exec(`asdf plugin add ${pluginName}`)
