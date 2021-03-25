@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { pluginList, list, listAll, set, install, uninstall } from './services/asdf.service'
+import { current, list, listAll, set, install, uninstall } from './services/asdf.service'
 import NewPlugin from './components/NewPlugin.vue'
 
 export default {
@@ -175,7 +175,7 @@ export default {
       try {
         this.pluginList = []
         this.trackers.pluginList = true
-        this.pluginList = await pluginList(this.path)
+        this.pluginList = await current(this.path)
       } finally {
         this.trackers.pluginList = false
       }
@@ -231,7 +231,7 @@ export default {
     addPlugin (pluginName) {
       this.pluginList.unshift({
         name: pluginName,
-        version: '---'
+        version: '______'
       })
     }
   },

@@ -1,25 +1,15 @@
 const { exec } = require('./exec.service')
 
-export const current = (execPath, pluginName) => exec(`cd ${execPath} && asdf current ${pluginName}`)
+export const current = async () => {
+    const currentList = (await exec(`asdf current`)).split('\n')
+    currentList.pop()    
 
-export const pluginList = async execPath => {
-    const pluginNames = (await exec(`cd ${execPath} && asdf plugin-list`)).split('\n')
-    pluginNames.pop()
-
-    const versionPromisses = []
-    const pluginList = []
-
-    pluginNames.forEach(plugin => {
-        versionPromisses.push(
-            (async () => {
-                pluginList.push({
-                    name: plugin,
-                    version: (await current(execPath, plugin)).split(' ')[1] || '---'
-                })
-            })())
+    return currentList.map(item => {
+        return {
+            name: item.split(' ')[0],
+            version: item.split(' ')[1]
+        }
     })
-
-    return Promise.all(versionPromisses).then(() => pluginList)
 }
 
 export const list = async pluginName => {
