@@ -18,6 +18,7 @@
       <v-container>
         <v-row>
           <v-col cols="6">
+            <plugin-list></plugin-list>
             <v-card>
 
                 <v-toolbar>
@@ -142,11 +143,12 @@
 <script>
 import { current, list, listAll, set, install, uninstall } from './services/asdf.service'
 import NewPlugin from './components/NewPlugin.vue'
+import PluginList from './components/PluginList.vue'
 
 export default {
   name: "App",
   components: {
-    NewPlugin
+    NewPlugin, PluginList
   },
   data () {
     return {
