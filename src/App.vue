@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app dense>
-      <v-btn icon small class="mr-1" @click="refresh()">
+      <v-btn icon small class="mr-1" @click="refresh()" disabled>
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
       <v-text-field
@@ -18,37 +18,7 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <plugin-list></plugin-list>
-            <v-card>
-
-                <v-toolbar>
-                  <v-toolbar-title>Plugins</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <new-plugin @addedPlugin="addPlugin"></new-plugin>
-                </v-toolbar>
-
-                <v-row justify="center" v-if="trackers.pluginList">
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                  ></v-progress-circular>
-                </v-row>
-
-                <v-list two-line>
-                  <v-list-item-group v-model="selectedPlugin">
-                    <v-list-item
-                      v-for="plugin in pluginList"
-                      :key="plugin.name"
-                      @click="loadInstalledVersionList(plugin.name);loadAvailableVersionList(plugin.name)">
-                      <v-list-item-content>
-                        <v-list-item-title v-text="plugin.name"></v-list-item-title>
-                        <v-list-item-subtitle v-text="plugin.version"></v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-
-            </v-card>
+            <plugin-list v-model="selectedPlugin"></plugin-list>
           </v-col>
           <v-col cols="6">
             <v-card>
@@ -141,14 +111,13 @@
 </template>
 
 <script>
-import { current, list, listAll, set, install, uninstall } from './services/asdf.service'
-import NewPlugin from './components/NewPlugin.vue'
+import { list, listAll, set, install, uninstall } from './services/asdf.service'
 import PluginList from './components/PluginList.vue'
 
 export default {
   name: "App",
   components: {
-    NewPlugin, PluginList
+    PluginList
   },
   data () {
     return {
@@ -158,7 +127,6 @@ export default {
       installedVersionList: [],
       availableVersionList: [],
       trackers: {
-        pluginList: false,
         installedVersionList: false,
         availableVersionList: false,
         setVersion: {},
@@ -167,20 +135,16 @@ export default {
       }
     }
   },
+  watch: {
+    selectedPlugin (value) {
+      this.loadInstalledVersionList(value.name)
+      this.loadAvailableVersionList(value.name)
+    }
+  },
   methods: {
     refresh () {
       this.installedVersionList = []
       this.availableVersionList = []
-      this.loadPluginList()
-    },
-    async loadPluginList () {
-      try {
-        this.pluginList = []
-        this.trackers.pluginList = true
-        this.pluginList = await current(this.path)
-      } finally {
-        this.trackers.pluginList = false
-      }
     },
     async loadInstalledVersionList (pluginName) {
       try {
@@ -204,8 +168,7 @@ export default {
       try {
         this.$set(this.trackers.setVersion, version, true)
         await set(scope, pluginName, version)
-        const plugin = this.pluginList.find(plugin => plugin.name === pluginName)
-        plugin.version = version
+        this.selectedPlugin.version = version
       } finally {
         this.$set(this.trackers.setVersion, version, false)
       }
@@ -229,12 +192,6 @@ export default {
       } finally {
         this.$set(this.trackers.uninstallVersion, version, false)
       }
-    },
-    addPlugin (pluginName) {
-      this.pluginList.unshift({
-        name: pluginName,
-        version: '______'
-      })
     }
   },
   mounted() {
