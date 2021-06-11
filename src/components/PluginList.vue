@@ -3,7 +3,7 @@
     <v-toolbar>
       <v-toolbar-title>Plugins</v-toolbar-title>
       <v-spacer></v-spacer>
-      <new-plugin @addedPlugin="addPlugin"></new-plugin>
+      <new-plugin v-model="pluginList"></new-plugin>
     </v-toolbar>
 
     <v-row justify="center" v-if="loader">
@@ -57,12 +57,6 @@ export default {
       } finally {
         this.loader = false;
       }
-    },
-    addPlugin(pluginName) {
-      this.pluginList.unshift({
-        name: pluginName,
-        version: "______",
-      });
     },
     async pluginRemove(pluginName) {
       await pluginRemove(pluginName);

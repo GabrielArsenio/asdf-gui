@@ -61,6 +61,7 @@
   import { add } from '../services/asdf.service'
 
   export default {
+    props: ['value'],
     data () {
       return {
         dialog: false,
@@ -78,7 +79,7 @@
 
           await add(pluginName)
 
-          this.$emit('addedPlugin', pluginName)
+          this.value.unshift({ name: pluginName, version: "______", })
           this.pluginName = null
         } catch (error) {
           this.isValidPlugin = false
