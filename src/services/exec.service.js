@@ -9,6 +9,11 @@ if (!env.PATH.includes('.asdf')) {
 }
 
 export const exec = command =>
-    new Promise(resolve =>
-        execute(command, { env } ,(error, stdout, stderr) =>
-            resolve((stdout + stderr).replace(/  +/g, ' '))))
+    new Promise((resolve, reject) =>
+        execute(command, { env }, (error, stdout, stderr) => {
+            if (error) {
+                reject(error)
+                return
+            }
+            resolve((stdout + stderr).replace(/  +/g, ' '))
+        }))
