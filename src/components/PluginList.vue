@@ -23,6 +23,11 @@
               v-text="plugin.version"
             ></v-list-item-subtitle>
           </v-list-item-content>
+          <v-list-item-action>
+            <v-btn icon @click.stop="pluginRemove(plugin.name)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </v-list-item-action>
         </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -30,7 +35,7 @@
 </template>
 
 <script>
-import { current } from "../services/asdf.service";
+import { current, pluginRemove } from "../services/asdf.service";
 import NewPlugin from "./NewPlugin.vue";
 
 export default {
@@ -58,6 +63,10 @@ export default {
         name: pluginName,
         version: "______",
       });
+    },
+    async pluginRemove(pluginName) {
+      await pluginRemove(pluginName);
+      this.pluginList = this.pluginList.filter(p => p.name !== pluginName)
     },
   },
   mounted() {

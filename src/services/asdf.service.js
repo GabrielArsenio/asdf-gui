@@ -33,3 +33,5 @@ export const install = (pluginName, version) => exec(`asdf install ${pluginName}
 export const uninstall = (pluginName, version) => exec(`asdf uninstall ${pluginName} ${version}`)
 
 export const add = pluginName => exec(`asdf plugin add ${pluginName}`)
+
+export const pluginRemove = pluginName => exec(`asdf plugin remove ${pluginName}`)
