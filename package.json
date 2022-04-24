@@ -75,7 +75,7 @@
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "css-loader": "^3.6.0",
     "electron": "^13.6.6",
-    "electron-devtools-installer": "^3.1.1",
+    "electron-devtools-installer": "^3.2.0",
     "file-loader": "^6.2.0",
     "node-loader": "^0.6.0",
     "style-loader": "^0.23.1",
