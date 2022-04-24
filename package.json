@@ -11,7 +11,10 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": ["asdf", "gui"],
+  "keywords": [
+    "asdf",
+    "gui"
+  ],
   "author": {
     "name": "GabrielArsenio",
     "email": "gabrielarsenioo@gmail.com"
@@ -83,6 +86,6 @@
     "@mdi/font": "^5.9.55",
     "electron-squirrel-startup": "^1.0.0",
     "vue": "^2.6.12",
-    "vuetify": "^2.4.8"
+    "vuetify": "^2.6.4"
   }
 }
